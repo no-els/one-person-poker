@@ -2,13 +2,14 @@ from terminal_playing_cards import Deck
 from terminal_playing_cards import View
 from terminal_playing_cards import Card as tpc_Card
 
+
 SUITS = ["spades", "hearts", "diamonds", "clubs"]
 RANKS = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
 
 
 class Card(tpc_Card):
     def __init__(self, rank, suit, value=0):
-        rank_dictionary = {
+        rank_value_dict = {
             "A": 1,
             "2": 2,
             "3": 3,
@@ -22,45 +23,26 @@ class Card(tpc_Card):
             "Q": 11,
             "K": 12,
         }
-        super().__init__(rank, suit, value=rank_dictionary[rank])
+
+        suit_value_dict = {"diamonds": 0.1, "clubs": 0.2, "hearts": 0.3, "spades": 0.4}
+        super().__init__(
+            rank, suit, value=rank_value_dict[rank] + suit_value_dict[suit]
+        )
 
     def __eq__(self, card):
         return (card.face == self.face) and (card.suit == self.suit)
 
 
-class Dealer:
-    """
-    need to implement dictionary
-    """
-
-    def __init__(self):
-        self.hand = []
-        self.suit_dict = dict()
-        self.rank_dict = dict()
-        for suit in SUITS:
-            self.suit_dict[suit] = []
-        for rank in RANKS:
-            self.rank_dict[rank] = []
-
-    def show_hand(self):
-        print(View(self.hand))
-
-    def add_card(self, card):
-        self.hand.append(card)
-
-    def best_hand(self):
-        """
-        Returns the best hand that the Dealer has
-        """
-        if len(self.hand) < 5:
-            print("Less than 5 cards")
-        else:
-            s
-
-
 class Player:
     """
-    need to implement dictionary
+    >>> game = Game()
+    >>> player = Player()
+    >>> cards = [Card('A', 'spades'), Card('2', 'spades'),Card('3', 'spades'),Card('4', 'spades'),Card('5', 'spades'), Card('6', 'hearts')]
+    >>> for i in cards:
+    ...     player.add_card(i)
+    ...
+    >>> player.has_flush()
+    Card('5', 'spades', value=5.4, hidden=False, picture=True)
     """
 
     def __init__(self):
@@ -78,6 +60,32 @@ class Player:
 
     def add_card(self, card):
         self.hand.append(card)
+        self.suit_dict[card.suit].append(card)
+        self.rank_dict[card.face].append(card)
+
+    def has_flush(self):
+        # Returns highest card of the best flush if exists. Otherwise, return None.
+        largest = Card("3", "diamonds", value=0)
+        for suit in self.suit_dict.keys():
+            if len(self.suit_dict[suit]) >= 5:
+                largest = max(largest, max(self.suit_dict[suit]))
+        if largest.value == 0:
+            return None
+        else:
+            return largest
+
+    def best_hand(self):
+        """
+        Returns the best hand that you have
+        """
+        if len(self.hand) < 5:
+            print("Less than 5 cards")
+
+
+class Dealer(Player):
+    """
+    The Dealer.
+    """
 
 
 class Game:
@@ -144,17 +152,8 @@ class Game:
             if self.draw(card_list) == True:
                 break
 
-    def is_straight(self, card_list):
-        """
-        If is straight, returns the highest card
-        """
-        if len(card_list) != 5:
-            print("Need length 5 cards")
-        else:
-            card_list.sort()
 
+if __name__ == "__main__":
+    import doctest
 
-game = Game()
-card_list = game.take_cards()
-
-game.draw_until_player(card_list)
+    doctest.testmod()
