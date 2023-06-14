@@ -1,4 +1,4 @@
-from terminal_playing_cards import Deck
+from terminal_playing_cards import Deck as tpc_Deck
 from terminal_playing_cards import View
 from terminal_playing_cards import Card as tpc_Card
 
@@ -31,6 +31,17 @@ class Card(tpc_Card):
 
     def __eq__(self, card):
         return (card.face == self.face) and (card.suit == self.suit)
+
+
+# class Deck(tpc_Deck):
+#     @staticmethod
+#     def _build(specs_dict: dict, **kwargs: bool):
+#         """Builds a deck of cards according to specifications."""
+#         return [
+#             Card(face, suit)
+#             for face in specs_dict.keys()
+#             for suit in specs_dict.get(face).keys()
+#         ]
 
 
 class Player:
