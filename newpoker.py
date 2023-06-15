@@ -232,11 +232,28 @@ class Hand:
                         newutils.highest_rank(list(ranks)) + " high " + suit + " flush"
                     )
             return False
+
     def straight(self):
-        #If hand has straight, then return string describing best straight
+        # If hand has straight, then return string describing best straight
         ranks_present = []
         for rank in Deck.ranks:
-            
+            if len(self.rank_to_suit_dict[rank]) > 0:
+                ranks_present.append(rank)
+        highest = newutils.get_straight_from_set(set(ranks_present))
+        if highest:
+            suits = self.rank_to_suit_dict[highest]
+            if "SPADE" in suits:
+                return "Straight with " + highest + " SPADE high"
+            if "HEART" in suits:
+                return "Straight with " + highest + " HEART high"
+            if "CLUB" in suits:
+                return "Straight with " + highest + " CLUB high"
+            if "DIAMOND" in suits:
+                return "Straight with " + highest + " DIAMOND high"
+            else:
+                raise Exception("Something weird in the dictionary")
+        else:
+            return False
 
 
 class Game:

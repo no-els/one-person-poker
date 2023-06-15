@@ -29,14 +29,14 @@ def get_straight_from_set(set_of_ranks):
         return False
 
 
-def highest_rank(set_of_ranks):
+def highest_rank(ranks):
     """
     >>> ranks = ['2','K', '3']
     >>> highest_rank(ranks)
     'K'
     """
     # Takes in list of strings of 'A','2','3'...,'J', 'Q', 'K' and returns highest rank
-    number_list = rank_string_to_value_list(set_of_ranks)
+    number_list = rank_string_to_value_list(ranks)
     number_list.sort(reverse=True)
     return value_to_rank_string(number_list[0])
 

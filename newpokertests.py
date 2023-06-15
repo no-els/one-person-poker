@@ -195,5 +195,52 @@ class FlushTest(unittest.TestCase):
         self.assertEqual(nine_high_flush.flush(), False)
 
 
+class StraightTest(unittest.TestCase):
+    def test_6_straight(self):
+        cards = [
+            Card("SPADE", "2"),
+            Card("HEART", "3"),
+            Card("SPADE", "4"),
+            Card("SPADE", "5"),
+            Card("SPADE", "6"),
+        ]
+        five_high_straight = Hand(cards)
+        self.assertEqual(five_high_straight.straight(), "Straight with 6 SPADE high")
+
+    def test_6_straight_2(self):
+        cards = [
+            Card("SPADE", "2"),
+            Card("HEART", "3"),
+            Card("SPADE", "4"),
+            Card("SPADE", "5"),
+            Card("HEART", "6"),
+        ]
+        five_high_straight = Hand(cards)
+        self.assertEqual(five_high_straight.straight(), "Straight with 6 HEART high")
+
+    def test_6_straight_3(self):
+        cards = [
+            Card("SPADE", "A"),
+            Card("SPADE", "2"),
+            Card("HEART", "3"),
+            Card("SPADE", "6"),
+            Card("SPADE", "4"),
+            Card("HEART", "6"),
+            Card("HEART", "5"),
+        ]
+        five_high_straight = Hand(cards)
+        self.assertEqual(five_high_straight.straight(), "Straight with 6 SPADE high")
+
+    def test_false_straight(self):
+        cards = [
+            Card("SPADE", "A"),
+            Card("SPADE", "2"),
+            Card("HEART", "3"),
+            Card("SPADE", "6"),
+        ]
+        five_high_straight = Hand(cards)
+        self.assertEqual(five_high_straight.straight(), False)
+
+
 if __name__ == "__main__":
     unittest.main()
