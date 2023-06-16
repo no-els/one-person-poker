@@ -35,6 +35,27 @@ class Player:
     def print_hand(self):
         self.hand.print_hand()
 
+    def get_best_hand(self):
+        # Returns a string describing the best hand. If empty hand, return False
+        hand = self.get_hand()
+        hand_functions = [
+            hand.straight_flush,
+            hand.four_of_a_kind,
+            hand.full_house,
+            hand.flush,
+            hand.straight,
+            hand.three_of_a_kind,
+            hand.two_pair,
+            hand.one_pair,
+            hand.high_card,
+        ]
+        for hand_function in hand_functions:
+            response = hand_function()
+            if response:
+                print(response)
+                return
+        print("Empty Hand")
+
 
 class Dealer(Player):
     """
@@ -251,9 +272,62 @@ class Hand:
             if "DIAMOND" in suits:
                 return "Straight with " + highest + " DIAMOND high"
             else:
-                raise Exception("Something weird in the dictionary")
+                raise Exception("There is something weird in the dictionary")
         else:
             return False
+
+    def three_of_a_kind(self):
+        # If hand has three of a kind, then return string describing best three of a kind
+        if self.get_num_cards() < 5:
+            return False
+        else:
+            for rank in Deck.ranks:
+                if len(self.rank_to_suit_dict[rank]) == 3:
+                    return rank + " three of a kind"
+            return False
+
+    def two_pair(self):
+        # If hand has two pair, then return string describing best two pair
+        if self.get_num_cards() < 5:
+            return False
+        else:
+            for rank in Deck.ranks:
+                if len(self.rank_to_suit_dict[rank]) == 2:
+                    for double_rank in Deck.ranks:
+                        if double_rank != rank:
+                            if len(self.rank_to_suit_dict[double_rank]) == 2:
+                                return rank + " and " + double_rank + " two pair"
+            return False
+
+    def one_pair(self):
+        # If a hand has one pair, then return string describing best pair
+        if self.get_num_cards() < 5:
+            return False
+        else:
+            for rank in Deck.ranks:
+                if len(self.rank_to_suit_dict[rank]) == 2:
+                    return rank + " pair"
+            return False
+
+    def high_card(self):
+        # If hand has high card, then return string describing high card
+        if self.get_num_cards() < 5:
+            return False
+        else:
+            for rank in Deck.ranks:
+                suits = self.rank_to_suit_dict[rank]
+                if len(suits) > 0:
+                    if "SPADE" in suits:
+                        return "SPADE " + rank + " high card"
+                    if "HEART" in suits:
+                        return "HEART " + rank + " high card"
+                    if "CLUB" in suits:
+                        return "CLUB " + rank + " high card"
+                    if "DIAMOND" in suits:
+                        return "DIAMOND " + rank + " high card"
+                    else:
+                        raise Exception("There is something weird in the dictionary")
+            raise Exception("Something really wrong happened")
 
 
 class Game:
@@ -295,3 +369,4 @@ if __name__ == "__main__":
     import doctest
 
     doctest.testmod()
+    game = Game()
