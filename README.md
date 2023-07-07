@@ -1,3 +1,3 @@
 # one-person-poker
 
-test hi
+A simple terminal one person poker game.
